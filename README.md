@@ -4,7 +4,7 @@
 
 <div align="center">
 
-# lUAURouter
+# LuauRouter
 
 </div>
 
@@ -83,8 +83,6 @@ server.handle_route("GET /", function(req: router.HttpRequest, route: string): r
     };
 end);
 ```
-
-### aa
 
 ## Notes
 
