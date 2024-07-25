@@ -1,0 +1,10 @@
+description = "Go-inspired HTTP Router"
+files = ["*"]
+keywords = ["http", "server"]
+main = "./src/init.luau"
+name = "LuauRouter"
+owner = "plainenglish"
+repository = ""
+version = "0.1.0"
+
+[dependencies]
