@@ -1117,13 +1117,13 @@ end
 --  Export
 --------------------------------------------------------------------------------
 
-router.server({ sys_log = print, req_log = print })
+--[[router.server({ sys_log = print, req_log = print })
     .handle_route("GET /upload", function()
         return "Upload page";
     end)
     .handle_route("GET /**", router.handlers.directory("../../Pictures/funnies", true))
     .start(8080)
-    .keep_alive();
+    .keep_alive();]]
 
 --[[
     TODO:
