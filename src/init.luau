@@ -1114,6 +1114,43 @@ function router.handlers.directory(dir: string, include_dir_listing: boolean?)
 end
 
 --------------------------------------------------------------------------------
+--  Predefined Responses
+--------------------------------------------------------------------------------
+
+router.responses = {};
+
+function router.responses.redirect(url: string): HttpResponse
+    return {
+        status = 302,
+        headers = {
+            location = url,
+        },
+    };
+end
+
+function router.responses.serve_file(file_path: string): HttpResponse
+    assert(fs.isFile(file_path), "file not found");
+
+    local ext = file_path:split(".");
+    ext = ext[#ext];
+
+    local content_type;
+    if ext then
+        content_type = mime_types["."..ext];
+    end
+
+    local file = fs.readFile(file_path);
+
+    return {
+        body = file,
+        headers = {
+            ["content-type"] = content_type,
+        },
+        compress = false,
+    };
+end
+
+--------------------------------------------------------------------------------
 --  Export
 --------------------------------------------------------------------------------
 
