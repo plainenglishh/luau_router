@@ -1150,6 +1150,46 @@ function router.res.serve_file(file_path: string): HttpResponse
     };
 end
 
+function router.res.render(file_path: string, new_env: {[string]: any}): HttpResponse
+    local src = fs.readFile(file_path);
+
+    src = src:gsub("{{(.-)}}", function(src)
+        if src:sub(1, 1) == "=" then
+            src = "return "..src:sub(2, #src);
+        end
+
+        local load_ok, func = pcall(luau.load, src);
+        if not load_ok then
+            return "<Compile Err: "..tostring(func)..">";
+        end
+        
+        local gf, sf = luau.load("return getfenv, setfenv;")(); -- Hopefully this prevents deoptimisation until the moment someone uses this function.
+                                                                -- It might work, it might not. It is what it is.
+        local env = gf(func);
+
+        for i, v in new_env do
+            env[i] = v;
+        end
+
+        sf(func, env);
+
+        local ok, val = pcall(func);
+        if ok then
+            return val;
+        else
+            return "[Runtime Err: "..tostring(val).."]";
+        end
+    end);
+
+    return {
+        status = 200,
+        body = src,
+        headers = {
+            ["content-type"] = "text/html",
+        },
+    }
+end
+
 --------------------------------------------------------------------------------
 --  Export
 --------------------------------------------------------------------------------
