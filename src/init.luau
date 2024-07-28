@@ -7,6 +7,7 @@ local serde = require("@lune/serde");
 local process = require("@lune/process");
 local datetime = require("@lune/datetime");
 local fs = require("@lune/fs");
+local luau = require("@lune/luau");
 
 local response_codes = require("./response_codes");
 local mime_types = require("./mime_types");
@@ -1150,7 +1151,7 @@ function router.res.serve_file(file_path: string): HttpResponse
     };
 end
 
-function router.res.render(file_path: string, new_env: {[string]: any}): HttpResponse
+function router.res.render(file_path: string, new_env: {[string]: any}?): HttpResponse
     local src = fs.readFile(file_path);
 
     src = src:gsub("{{(.-)}}", function(src)
@@ -1167,7 +1168,7 @@ function router.res.render(file_path: string, new_env: {[string]: any}): HttpRes
                                                                 -- It might work, it might not. It is what it is.
         local env = gf(func);
 
-        for i, v in new_env do
+        for i, v in new_env or {} do
             env[i] = v;
         end
 
