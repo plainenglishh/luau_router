@@ -1117,9 +1117,9 @@ end
 --  Predefined Responses
 --------------------------------------------------------------------------------
 
-router.responses = {};
+router.res = {};
 
-function router.responses.redirect(url: string): HttpResponse
+function router.res.redirect(url: string): HttpResponse
     return {
         status = 302,
         headers = {
@@ -1128,7 +1128,7 @@ function router.responses.redirect(url: string): HttpResponse
     };
 end
 
-function router.responses.serve_file(file_path: string): HttpResponse
+function router.res.serve_file(file_path: string): HttpResponse
     assert(fs.isFile(file_path), "file not found");
 
     local ext = file_path:split(".");
